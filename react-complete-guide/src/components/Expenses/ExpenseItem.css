@@ -45,6 +45,11 @@
   border-radius: 12px;
 }
 
+.no_expenses {
+  text-align: center;
+  color: #868181;
+}
+
 @media (min-width: 580px) {
   .expense-item__description {
     flex-direction: row;
