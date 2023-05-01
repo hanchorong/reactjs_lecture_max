@@ -89,6 +89,7 @@ const Login = () => {
   const submitHandler = (event) => {
     event.preventDefault();
     authCtx.onLogin(emailState.value, passwordState.value);
+    console.log(authCtx);
   };
 
   return (
