@@ -14,23 +14,26 @@ function App() {
     setError(null);
     try {
       const response = await fetch(
-        "https://react-http-62e2b-default-rtdb.firebaseio.com/movies.json"
+        "https://react-http-f8cdf-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json"
       );
+
       if (!response.ok) {
         throw new Error("Something went wrong");
       }
-
       const data = await response.json();
+      console.log("fetch data: ", data);
 
-      const transformedMovies = data.results.map((moviesData) => {
-        return {
-          id: moviesData.episode_id,
-          title: moviesData.title,
-          openingText: moviesData.opening_crawl,
-          releaseDate: moviesData.release_date,
-        };
-      });
-      setMovies(transformedMovies);
+      const loadedMovies = [];
+
+      for (const key in data) {
+        loadedMovies.push({
+          id: key,
+          openingText: data[key].openingText,
+          releaseData: data[key].releaseData,
+          title: data[key].title,
+        });
+      }
+      setMovies(loadedMovies);
     } catch (error) {
       setError(error.message);
     }
@@ -43,34 +46,28 @@ function App() {
 
   async function addMovieHandler(movie) {
     const response = await fetch(
-      "https://react-http-62e2b-default-rtdb.firebaseio.com/movies.json",
+      "https://react-http-f8cdf-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json",
       {
         method: "POST",
         body: JSON.stringify(movie),
-        headers: {
-          "Content-Type": "application/json",
-        },
+        header: { "Content-Type": "application/json" },
       }
     );
     const data = await response.json();
-    console.log(data);
+    console.log("post data", data);
   }
 
-  let content = <p>Found no movies.</p>;
-
+  let content = <p>Found no movies</p>;
+  console.log(movies.length);
   if (movies.length > 0) {
     content = <MoviesList movies={movies} />;
   }
-
   if (error) {
     content = <p>{error}</p>;
   }
-
   if (isLoading) {
     content = <p>Loading...</p>;
-  } else {
   }
-
   return (
     <React.Fragment>
       <section>
